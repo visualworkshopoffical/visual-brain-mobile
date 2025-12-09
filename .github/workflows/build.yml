@@ -1,0 +1,48 @@
+name: Build Android APK
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Depoyu Çek (Checkout)
+      uses: actions/checkout@v3
+
+    - name: Python Kurulumu
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+
+    - name: Java Kurulumu (Android için)
+      uses: actions/setup-java@v3
+      with:
+        distribution: 'temurin'
+        java-version: '17'
+
+    - name: Flutter Kurulumu (Motor)
+      uses: subosito/flutter-action@v2
+      with:
+        channel: 'stable'
+
+    - name: Android SDK Ayarları
+      uses: android-actions/setup-android@v3
+
+    - name: Kütüphaneleri Yükle
+      run: |
+        pip install flet colorgram.py
+        
+    - name: APK İnşa Et (Build)
+      run: |
+        flet build apk --verbose
+
+    - name: APK'yı Paketle ve Sun
+      uses: actions/upload-artifact@v4
+      with:
+        name: visual-brain-apk
+        path: build/app/outputs/flutter-apk/app-release.apk
