@@ -41,8 +41,8 @@ jobs:
       run: |
         flet build apk --verbose
 
-    - name: APK'yı Paketle ve Sun
+    - name: APK'yı Bul ve Paketle
       uses: actions/upload-artifact@v4
       with:
         name: visual-brain-apk
-        path: build/app/outputs/flutter-apk/app-release.apk
+        path: "**/*.apk"
